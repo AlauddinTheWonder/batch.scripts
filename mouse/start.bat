@@ -24,12 +24,15 @@ Set /a maxX=1000
 Set /a minY=10
 Set /a maxY=700
 
+Set /a cnt=0
+
+REM Add commands in Sequence
 Set com[1]=Move
 Set com[2]=LeftClick
 Set com[3]=ScrollUp
 Set com[4]=ScrollDown
 
-Set /a cnt=0
+REM Set number of commands
 Set /a maxCnt=4
 
 

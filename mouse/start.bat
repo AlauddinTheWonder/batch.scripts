@@ -16,11 +16,21 @@ echo Taking control...
 echo.
 
 
+REM Variables defination
+
 Set /a minX=10
 Set /a maxX=1000
 
 Set /a minY=10
 Set /a maxY=700
+
+Set com[1]=Move
+Set com[2]=LeftClick
+Set com[3]=ScrollUp
+Set com[4]=ScrollDown
+
+Set /a cnt=0
+Set /a maxCnt=4
 
 
 
@@ -49,22 +59,52 @@ If Not Exist mouse.exe (
 
 :Start
 echo.
-timeout /T 5 >nul
 
 :Action
+timeout /T 5 >nul
 
-:Move
+Set /a cnt=%cnt% + 1
+
+If %cnt% GTR %maxCnt% Set /a cnt=1
+
+Goto :Com_!com[%cnt%]!
+
+Goto :End
+
+
+:Com_Move
 Set /a x=%RANDOM% * (%maxX% - %minX% + 1) / 32768 + %minX%
 Set /a y=%RANDOM% * (%maxY% - %minY% + 1) / 32768 + %minY%
 
 mouse.exe moveTo %x%x%y%
 echo cursor moved to %x%x%y%
 
-timeout /T 5 >nul
+GOTO :Action
 
-
+:Com_LeftClick
+mouse.exe click
+echo mouse left clicked
 
 GOTO :Action
+
+
+:Com_ScrollUp
+Set /a sy=%RANDOM% * 200 / 32768 + 10
+
+mouse.exe scrollUp %sy%
+echo scrolled up by %sy%
+
+GOTO :Action
+
+
+:Com_ScrollDown
+Set /a sy=%RANDOM% * 200 / 32768 + 10
+
+mouse.exe scrollDown %sy%
+echo scrolled down by %sy%
+
+GOTO :Action
+
 
 
 :End

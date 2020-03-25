@@ -1,0 +1,8 @@
+EQU : Equal
+NEQ : Not equal
+
+LSS : Less than <
+LEQ : Less than or Equal <=
+
+GTR : Greater than >
+GEQ : Greater than or equal >=

@@ -3,6 +3,17 @@
 
 SetLocal EnableDelayedExpansion
 
+
+REM Add commands in Sequence
+
+REM Available commands: Move LeftClick RightClick ScrollUp ScrollDown
+
+Set "ComList=Move RightClick LeftClick ScrollUp ScrollDown"
+
+
+
+REM Don't try to change anything below
+
 :SIGNATURE
 echo ################################################
 echo ########## Created by Alauddin Ansari ##########
@@ -17,24 +28,22 @@ echo.
 
 
 REM Variables defination
-
 Set /a minX=10
 Set /a maxX=1000
 
 Set /a minY=10
 Set /a maxY=700
 
+Set /a minT=5
+Set /a maxT=15
+
 Set /a cnt=0
 
-REM Add commands in Sequence
-Set com[1]=Move
-Set com[2]=LeftClick
-Set com[3]=ScrollUp
-Set com[4]=ScrollDown
-
-REM Set number of commands
-Set /a maxCnt=4
-
+set /a maxCnt=0
+for %%a in (%ComList%) do (
+   set com[!maxCnt!]=%%a
+   set /A maxCnt+=1
+)
 
 
 :CheckScript
@@ -64,13 +73,20 @@ If Not Exist mouse.exe (
 echo.
 
 :Action
-timeout /T 5 >nul
+Set /a t=%RANDOM% * (%maxT% - %minT% + 1) / 32768 + %minT%
+echo waiting for %t% seconds...
+
+timeout /T %t% >nul
 
 Set /a cnt=%cnt% + 1
 
 If %cnt% GTR %maxCnt% Set /a cnt=1
 
-Goto :Com_!com[%cnt%]!
+Set /a curComm=%cnt% - 1
+
+echo calling !com[%curComm%]!
+
+Goto :Com_!com[%curComm%]!
 
 Goto :End
 
@@ -87,6 +103,12 @@ GOTO :Action
 :Com_LeftClick
 mouse.exe click
 echo mouse left clicked
+
+GOTO :Action
+
+:Com_RightClick
+mouse.exe rightClick
+echo mouse right clicked
 
 GOTO :Action
 
